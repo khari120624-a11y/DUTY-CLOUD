@@ -19,8 +19,12 @@ app.use('/api/locations', locationRoutes);
 
 // Serve Static Frontend (Production Deployment)
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+app.use((req, res, next) => {
+  if (req.method === 'GET') {
+    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+  } else {
+    next();
+  }
 });
 
 app.listen(PORT, () => {
