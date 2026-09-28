@@ -2,6 +2,5 @@ services:
   - type: web
     name: dutycloud-portal
     env: node
-    rootDir: backend
-    buildCommand: npm install
-    startCommand: node server.js
+    buildCommand: cd backend && npm install && cd ../frontend && npm install && npm run build
+    startCommand: cd backend && node server.js
