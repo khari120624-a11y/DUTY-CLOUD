@@ -362,6 +362,17 @@ function AssignDuty() {
     if(!form.staffId) return alert('Select staff');
     if(!form.location) return alert(`No locations exist for ${form.shift}. Go to Duty Locations menu and add one!`);
     
+    // Collision Detection Logic
+    const existingLogsForStaff = dutyLogs.filter(d => d.staff._id === form.staffId);
+    
+    if (existingLogsForStaff.some(d => d.shift === form.shift)) {
+      return alert(`❌ COLLISION DETECTED: This person is already assigned to ${form.shift} today!`);
+    }
+
+    if (existingLogsForStaff.length > 0 && !form.status.includes('OT')) {
+      return alert(`❌ INVALID STATUS: This person already has a regular shift today. Their second shift MUST be marked as OT!`);
+    }
+    
     try {
       await axios.post(`${API_URL}/duty`, {
         staff: form.staffId,
